@@ -5,10 +5,9 @@ class About extends React.Component{
     return(
     <div>
       <h1>
-         About
+         PARCELTRACE WUBBA LUBBA DUB DUB
       </h1>
     </div>
-
     );
   }
 
