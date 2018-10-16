@@ -1,18 +1,12 @@
 import React from 'react';
 
 
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grid';
 import Grid from '@material-ui/core/Grid';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
 import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
 import { withStyles } from '@material-ui/core/styles';
 
 import TempChart from './TempChart';
+import GPSChart from './GPSChart';
 
 import axios from 'axios';
 
@@ -22,21 +16,22 @@ const styles = {
   header: {
     paddingLeft: 20,
   }, 
-  gridItems: {
+  gridItem: {
     display: 'flex',
     flexDirection: 'column', 
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-  }
+    marginBottom: '40px',
+  },
+  
 }
 
 class Charts extends React.Component{
   
   state={
-    gpsData: {},
+    gpsFeed: {},
     tempFeed: {},
     tempMenu: false,
-    tempOption: 'Most Recent',
     updated: false,
   }
 
@@ -50,18 +45,26 @@ class Charts extends React.Component{
     clearInterval(this.intervalID);
   }
 
-  updateData = () => {
-    let gpsData, tempFeed;
-    // GPS request
-    axios.get('https://api.thingspeak.com/channels/586557/feeds.json?results=1000')
-    .then((response) => {
-      gpsData = response.data.feeds;
-      return axios.get('https://api.thingspeak.com/channels/569505/feeds.json?results=1000')
-    })
-    .then((response) => {
-        tempFeed = response.data.feeds;
-        this.setState({ gpsData: gpsData, tempFeed: tempFeed, updated: true });
-    });
+  updateData = async () => {
+    // let gpsFeed, tempFeed;
+    // // GPS request
+    // axios.get('https://api.thingspeak.com/channels/586557/feeds.json?results=1000')
+    // .then((response) => {
+    //   gpsData = response.data.feeds;
+    //   return axios.get('https://api.thingspeak.com/channels/569505/feeds.json?results=1000')
+    // })
+    // .then((response) => {
+    //     tempFeed = response.data.feeds;
+    //     this.setState({ gpsData: gpsData, tempFeed: tempFeed, updated: true });
+    // });
+
+    const gpsFeed = await axios('https://api.thingspeak.com/channels/586557/feeds.json?results=1000');
+    const tempFeed = await axios('https://api.thingspeak.com/channels/569505/feeds.json?results=1000');
+
+    if (gpsFeed !== this.state.gpsFeed){
+      this.setState({gpsFeed: gpsFeed, tempFeed: tempFeed});
+    }
+
   }
   
   handleTempMenu = () => {
@@ -70,21 +73,42 @@ class Charts extends React.Component{
 
   render() {
 
-    const { classes, initTempFeed } = this.props; 
+    const { classes, initTempFeed, initGPSFeed } = this.props; 
 
-    const { tempFeed, gpsData } = this.state; 
+    const { tempFeed, gpsFeed, updated } = this.state; 
 
     return(
       <section>
-        <Grid container direction="row">
-          <Grid item className={ classes.gridItems } xs={6}>
-            <Typography>
+        <Grid container direction="row"  spacing={40}>
+          {/* MAP */}
+          <Grid item className={ classes.gridItem } xs={12}>
+            <Typography variant="headline">
+              Location
+            </Typography>
+
+            <GPSChart 
+                updated={updated}
+                initGPSFeed={initGPSFeed}
+                gpsFeed={gpsFeed}
+            />
+
+          </Grid>
+
+          {/* TEMPERATURE GRAPH */}
+          <Grid item className={ classes.gridItem } xs={12}>
+            <Typography variant='headline'>
               Temperature and Humidity
             </Typography>
 
-            <TempChart updated={false} initTempFeed={initTempFeed} tempFeed={tempFeed} />
-
+            <TempChart 
+              updated={updated} 
+              initTempFeed={initTempFeed} 
+              tempFeed={tempFeed} 
+            />
           </Grid>
+
+         
+            
 
 
         </Grid>

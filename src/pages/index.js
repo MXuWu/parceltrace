@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-// import fetch from 'isomor'
 
 import Header from '../components/Header';
 import Charts from '../components/Charts';
@@ -21,8 +20,8 @@ const styles = {
   main: {
     marginTop: 100,
     // width: '90%',
-    marginLeft: '10%',
-    marginRight: '10%', 
+    marginLeft: '5%',
+    marginRight: '5%', 
     // padding: '0px 50px 0px 50px',
   }
 }
@@ -33,22 +32,24 @@ class Home extends React.Component{
 
 
     const tempFeed = await axios('https://api.thingspeak.com/channels/569505/feeds.json?results=1000')
+    const gpsFeed = await axios('https://api.thingspeak.com/channels/586557/feeds.json?results=1000');
+
 
     
-    return { tempFeed: tempFeed.data.feeds };
+    return { tempFeed: tempFeed.data.feeds, gpsFeed: gpsFeed.data.feeds };
   
   }
 
   render() {
   
-    const { classes, tempFeed } = this.props;
+    const { classes, tempFeed, gpsFeed } = this.props;
 
     return(
       <div className={ classes.root }>
         <Header/>
 
         <main className= { classes.main }>
-          <Charts initTempFeed={tempFeed} />
+          <Charts initTempFeed={tempFeed} initGPSFeed={gpsFeed} />
         </main>
       </div>
     );
