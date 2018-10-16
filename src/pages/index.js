@@ -50,6 +50,8 @@ class Home extends React.Component{
 
         <main className= { classes.main }>
           <Charts initTempFeed={tempFeed} initGPSFeed={gpsFeed} />
+
+          {/* <Tables /> */}
         </main>
       </div>
     );
