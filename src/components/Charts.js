@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
+import Tables from './Tables';
 import TempChart from './TempChart';
 import GPSChart from './GPSChart';
 
@@ -62,7 +63,8 @@ class Charts extends React.Component{
     const tempFeed = await axios('https://api.thingspeak.com/channels/569505/feeds.json?results=1000');
 
     if (gpsFeed !== this.state.gpsFeed){
-      this.setState({gpsFeed: gpsFeed, tempFeed: tempFeed});
+      console.log('update');
+      this.setState({gpsFeed: gpsFeed, tempFeed: tempFeed, updated: true});
     }
 
   }
@@ -76,6 +78,8 @@ class Charts extends React.Component{
     const { classes, initTempFeed, initGPSFeed } = this.props; 
 
     const { tempFeed, gpsFeed, updated } = this.state; 
+
+
 
     return(
       <section>
@@ -107,10 +111,11 @@ class Charts extends React.Component{
             />
           </Grid>
 
+          <Grid item className={ classes.gridItem } xs={12}>
+            <Tables gpsFeed={gpsFeed} tempFeed={tempFeed} initGPSFeed={initGPSFeed} initTempFeed={initTempFeed}/>
+          </Grid>
+
          
-            
-
-
         </Grid>
       </section>
     );

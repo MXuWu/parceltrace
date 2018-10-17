@@ -41,9 +41,12 @@ class GPSChart extends React.Component{
     // // let lastInd = 114;
     let numFeeds = 80;
     let feedsLength = updated ? gpsFeed.length : initGPSFeed.length;
+
     for (let i = (feedsLength - 1); i >= (feedsLength - numFeeds); i--) {
       selectFeeds.unshift(feeds[i]);
     }
+
+    console.log(selectFeeds);
 
     let pathCoords = [];
     let gpsData = selectFeeds.map((feed) => {

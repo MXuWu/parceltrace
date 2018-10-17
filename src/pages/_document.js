@@ -17,6 +17,8 @@ class MyDocument extends Document {
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Montserrat+Alternates:400" rel="stylesheet" />
 
+          <link rel="stylesheet" href="node_modules/react-table/react-table.css" />
+
           <title>ParcelTrace</title>
 
           <meta charSet="utf-8" />
