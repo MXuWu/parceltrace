@@ -36,8 +36,7 @@ class Tables extends React.Component {
       // } 
       return dataPoint;
     })
-    console.log('tempData');
-    console.log(tempData);
+
     const columns = [
       {
         name: 'Date',
@@ -58,6 +57,10 @@ class Tables extends React.Component {
         title={"Raw Data"}
         data={tempData}
         columns={columns}
+        options={{
+          selectableRows: false,
+          rowsPerPage: 25
+        }}
       />
     )
   }
